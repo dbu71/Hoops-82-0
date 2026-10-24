@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Hoops 82-0</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: scoreboard-and-hardwood. LED amber digits on a dark arena, maple court lines, foil trading cards by rarity */
+:root{--bg:#0b0e13;--panel:#141a22;--panel2:#1b232e;--ink:#f3ede0;--dim:#97a2b0;--line:rgba(243,237,224,.16);--maple:#d9a560;--led:#ffb020;--win:#3ddc84;--loss:#ff4a3a;
+ --t0:#8a919c;--t1:#78b0ff;--t2:#ffc23a;--t3:#c985ff;--t4:#62f0ff;
+ --disp:'Anton','Impact',sans-serif;--ui:'Barlow Condensed','Arial Narrow',sans-serif;--led-f:'Share Tech Mono',ui-monospace,monospace;color-scheme:dark}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:19px;line-height:1.2;min-height:100%;-webkit-tap-highlight-color:transparent;
+ padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible{outline:2px solid var(--led);outline-offset:2px}
+main{max-width:560px;margin:0 auto;padding-block:16px 40px}
+section[hidden]{display:none}
+h1,h2,h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;letter-spacing:.02em;margin:0;text-wrap:balance}
+.led{font-family:var(--led-f);color:var(--led);text-shadow:0 0 14px rgba(255,176,32,.45)}
+small{color:var(--dim)}
+.hero{position:relative;padding:26px 18px 22px;border-radius:14px;overflow:hidden;background:repeating-linear-gradient(90deg,#c98f4a 0 46px,#d29a54 46px 47px,#bf8644 47px 92px,#cc9350 92px 93px);box-shadow:inset 0 0 0 3px rgba(10,6,2,.55),0 14px 40px rgba(0,0,0,.5)}
+.hero::before{content:"";position:absolute;left:50%;top:60%;width:340px;height:340px;margin:-170px 0 0 -170px;border:4px solid rgba(255,255,255,.85);border-radius:50%}
+.hero::after{content:"";position:absolute;left:0;right:0;top:60%;height:4px;background:rgba(255,255,255,.85)}
+.hero>*{position:relative;z-index:1}
+.hero h1{font-size:clamp(70px,24vw,130px);line-height:.88;color:#17120c;text-shadow:3px 3px 0 rgba(255,255,255,.45)}
+.hero h1 em{font-style:normal;color:#b3261e}
+.hero p{margin:10px 0 0;font-weight:700;font-size:22px;color:#17120c;max-width:24ch}
+#rec{margin:14px 2px;color:var(--dim);font-size:18px}#rec b{color:var(--led);font-family:var(--led-f);font-weight:400}
+.big{display:block;width:100%;padding:16px 18px;border-radius:10px;text-align:left;font-family:var(--disp);font-size:26px;letter-spacing:.04em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--line);margin-top:10px}
+.big small{display:block;font-family:var(--ui);font-size:16px;letter-spacing:0;text-transform:none;opacity:.85}
+.big.main{background:var(--led);color:#1a1100;border-color:var(--led)}
+.big.main small{color:#3a2800}
+.big:disabled{opacity:.4}
+.how{margin:16px 2px 0;color:var(--dim);font-size:18px;display:grid;gap:4px}
+/* draft */
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:6px 0 12px}
+.hd h2{font-size:38px;line-height:.95}.hd small{display:block;font-family:var(--led-f);font-size:14px;letter-spacing:.08em;color:var(--led);text-transform:uppercase}
+.sm{padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:var(--panel2);font-weight:700;letter-spacing:.04em;font-size:16px;text-transform:uppercase;white-space:nowrap}
+.sm:disabled{opacity:.35}
+#dPips{display:flex;gap:6px;margin-bottom:14px}
+#dPips i{flex:1;text-align:center;padding:5px 0;border-radius:6px;font-style:normal;font-weight:700;font-size:14px;letter-spacing:.06em;background:var(--panel);color:var(--dim);border:1px solid var(--line)}
+#dPips i.done{background:var(--maple);color:#1a1100;border-color:var(--maple)}#dPips i.now{border-color:var(--led);color:var(--led);box-shadow:0 0 0 1px var(--led)}
+#pack{display:grid;gap:10px}
+.pc{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,var(--panel2),var(--panel));border:2px solid var(--c);position:relative;overflow:hidden;--c:var(--t0)}
+.pc.t1{--c:var(--t1)}.pc.t2{--c:var(--t2)}.pc.t3{--c:var(--t3)}.pc.t4{--c:var(--t4)}
+.pc::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,color-mix(in srgb,var(--c) 22%,transparent) 50%,transparent 60%);transform:translateX(-120%);transition:transform .7s}
+.pc:hover::after,.pc:focus-visible::after,.pc.t4::after{transform:translateX(120%)}
+.pc.t4::after{animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.pc.t3,.pc.t4{box-shadow:0 0 22px color-mix(in srgb,var(--c) 38%,transparent)}
+.pc:active{transform:scale(.985)}
+.pc.in{animation:up .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.ovr{font-family:var(--disp);font-size:50px;line-height:1;min-width:64px;text-align:center;color:var(--c)}
+.mid{min-width:0;display:grid;gap:2px}.mid b{font-size:24px;font-weight:700;letter-spacing:.01em}.mid small{font-size:16px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}.tags em{font-style:normal;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--ink)}
+#mini{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:16px}
+.ms{padding:6px 2px;border-radius:8px;text-align:center;background:var(--panel);border:1px dashed var(--line);min-width:0}.ms.on{border-style:solid;border-color:var(--maple)}
+.ms small{display:block;font-size:11px;letter-spacing:.1em;font-weight:700}.ms b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* review */
+#court{position:relative;color:rgba(255,255,255,.7);border-radius:12px;overflow:hidden;background:repeating-linear-gradient(90deg,#b9803f 0 38px,#c58a47 38px 39px);aspect-ratio:300/260;box-shadow:inset 0 0 0 3px rgba(10,6,2,.5)}
+#court svg{position:absolute;inset:0;width:100%;height:100%}
+.tok{position:absolute;transform:translate(-50%,-50%);width:23%;text-align:center;padding:5px 2px 4px;border-radius:10px;background:rgba(11,14,19,.92);border:2px solid var(--c);--c:var(--t0);color:var(--ink)}
+.tok.t1{--c:var(--t1)}.tok.t2{--c:var(--t2)}.tok.t3{--c:var(--t3)}.tok.t4{--c:var(--t4)}
+.tok i{display:block;font-style:normal;font-family:var(--disp);font-size:24px;line-height:1;color:var(--c)}.tok b{display:block;font-size:14px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tok small{font-size:11px;letter-spacing:.1em;font-weight:700}
+#bench{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.bn{padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--c,var(--line));display:grid;gap:1px;position:relative}.bn.t4{--c:var(--t4)}.bn.t3{--c:var(--t3)}.bn.t2{--c:var(--t2)}.bn.t1{--c:var(--t1)}
+.bn small{font-size:12px;letter-spacing:.12em;font-weight:700}.bn b{font-size:19px}.bn span{position:absolute;right:12px;top:10px;font-family:var(--disp);font-size:26px;color:var(--c,var(--led))}
+.scoreb{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.cell{padding:12px 14px;border-radius:12px;background:#07090c;border:1px solid var(--line)}
+.cell small{display:block;font-size:13px;letter-spacing:.14em;font-weight:700;text-transform:uppercase}.cell .led{display:block;font-size:46px;line-height:1.05}.cell .led.sm2{font-size:34px}
+#bd{display:grid;gap:8px}
+.bl{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:10px 12px;background:var(--panel);border-radius:10px;border:1px solid var(--line)}
+.bl b{font-size:19px}.bl span{font-family:var(--led-f);color:var(--led);font-size:22px;grid-row:span 2;align-self:center}.bl small{font-size:16px}
+/* season */
+#board{padding:14px;border-radius:14px;background:#07090c;border:2px solid #2a323d}
+#bt{display:flex;align-items:center;justify-content:center;gap:16px;text-align:center}
+#bt .n{font-family:var(--led-f);font-size:84px;line-height:1;text-shadow:0 0 22px rgba(255,176,32,.45);color:var(--led)}#bt .n.l{color:var(--loss);text-shadow:0 0 22px rgba(255,74,58,.4)}
+#bt small{display:block;font-size:14px;letter-spacing:.2em;font-weight:700}
+.dash{font-family:var(--led-f);font-size:44px;color:var(--dim)}
+.shake{animation:shk .5s}
+@keyframes shk{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+#sg{text-align:center;font-family:var(--led-f);font-size:14px;letter-spacing:.1em;color:var(--dim);margin-top:6px}
+#opp{text-align:center;font-size:24px;font-weight:700;margin-top:8px;min-height:1.2em}
+#scr{text-align:center;font-family:var(--led-f);font-size:30px;min-height:1.2em}#scr.w{color:var(--win)}#scr.l{color:var(--loss)}
+#st{text-align:center;color:var(--led);font-weight:700;letter-spacing:.06em;min-height:1.2em;text-transform:uppercase;font-size:16px}
+#dots{display:grid;grid-template-columns:repeat(21,1fr);gap:3px;margin:14px 0}
+#dots i{aspect-ratio:1;border-radius:3px;background:#1d2530}#dots i.w{background:var(--win)}#dots i.l{background:var(--loss)}
+#lg p{margin:0;padding:6px 10px;border-left:4px solid var(--line);background:var(--panel);font-size:17px;margin-bottom:4px;border-radius:0 6px 6px 0}#lg p.w{border-color:var(--win)}#lg p.l{border-color:var(--loss)}#lg b{font-family:var(--led-f);font-weight:400;color:var(--dim);margin-right:6px}
+#spd{display:flex;gap:6px;margin-top:10px}#spd button{flex:1;padding:11px 4px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px}#spd button.on{border-color:var(--led);color:var(--led)}
+#toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);padding:10px 16px;border-radius:10px;background:#2a1412;border:1px solid var(--loss);opacity:0;transition:.3s;pointer-events:none;max-width:92%;font-weight:700;z-index:5}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+/* end */
+#eRec{font-family:var(--led-f);font-size:clamp(70px,22vw,120px);line-height:1;color:var(--led);text-shadow:0 0 30px rgba(255,176,32,.4);text-align:center;margin-top:10px}
+#eRec.gold{color:#fff3b0;text-shadow:0 0 40px #ffcf40,0 0 80px #ff9a00;animation:glow 2s ease-in-out infinite alternate}
+@keyframes glow{to{text-shadow:0 0 60px #ffcf40,0 0 120px #ff9a00}}
+#eT{font-size:46px;text-align:center}#eD{text-align:center;color:var(--dim);font-size:20px;margin:4px 0 14px}
+#eS{display:grid;gap:8px}#eS div{padding:10px 14px;background:var(--panel);border-radius:10px;border:1px solid var(--line)}#eS small{display:block;font-size:13px;letter-spacing:.12em;font-weight:700;text-transform:uppercase}#eS b{font-size:20px}
+#eP{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}#eP span{padding:5px 10px;border-radius:99px;font-weight:700;font-size:15px;border:1px solid var(--line)}#eP .w{border-color:var(--win);color:var(--win)}#eP .l{border-color:var(--loss);color:var(--loss)}
+#eL{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px}#eL span{padding:4px 10px;border-radius:99px;background:var(--panel2);font-size:16px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<main>
+<section id="title">
+ <div class="hero"><h1>Hoops<br><em>82-0</em></h1><p>Build a roster of legends. Survive the whole season.</p></div>
+ <div id="rec"></div>
+ <button type="button" class="big main" id="bDaily">Daily draft<small id="dNote"></small></button>
+ <button type="button" class="big" id="bRand">Random draft<small>New packs every time</small></button>
+ <div class="how"><span>1. Open packs and pick a point guard, guard, forwards, a center, a sixth man and a coach.</span><span>2. Mind the fit: you need shooting, passing, defence and size. Teammates from one franchise add chemistry.</span><span>3. Simulate 82 games. One loss ends the perfect dream.</span></div>
+</section>
+<section id="draft" hidden>
+ <div class="hd"><div><small id="dStep"></small><h2 id="dSlot"></h2></div><button type="button" class="sm" id="rr"></button></div>
+ <div id="dPips"></div><div id="pack"></div><div id="mini"></div>
+</section>
+<section id="review" hidden>
+ <div class="hd"><div><small>Your roster</small><h2>Starting five</h2></div></div>
+ <div id="court"></div><div id="bench"></div>
+ <div class="scoreb"><div class="cell"><small>Team rating</small><span class="led" id="rtv"></span></div><div class="cell"><small>Perfect season odds</small><span class="led sm2" id="perf"></span><small id="proj"></small></div></div>
+ <div id="bd"></div>
+ <button type="button" class="big main" id="bSim">Simulate the season</button>
+ <button type="button" class="big" id="bRe">Redraft</button>
+</section>
+<section id="season" hidden>
+ <div id="board"><div id="bt"><div><span class="n" id="sw">0</span><small>WINS</small></div><span class="dash">–</span><div><span class="n l" id="sl">0</span><small>LOSSES</small></div></div><div id="sg"></div></div>
+ <div id="opp"></div><div id="scr"></div><div id="st"></div>
+ <div id="dots"></div><div id="lg"></div>
+ <div id="spd"><button type="button" data-s="0">Pause</button><button type="button" data-s="1" class="on">1x</button><button type="button" data-s="3">3x</button><button type="button" data-s="9">Fast</button></div>
+ <button type="button" class="big" id="bSkip" style="margin-top:12px">Skip to the end</button>
+</section>
+<section id="end" hidden>
+ <div id="eRec"></div><h2 id="eT"></h2><div id="eD"></div>
+ <div id="eS"></div><div id="eP"></div><div id="eL"></div>
+ <button type="button" class="big main" id="bCopy">Copy my season</button><button type="button" class="big" id="bAgain">Back to the court</button>
+</section>
+<div id="toast" role="status"></div>
+</main>
+<script>(function(){'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function hash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function mulb(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+/* name|positions|overall|team|traits  (SH shooter, PL playmaker, DF defender, BG big/glass, SC scorer). Ratings are the game's own estimates. */
+const RAW=`Stephen Curry|PG|97|GSW|SH,PL
+Magic Johnson|PG/SF|97|LAL|PL,BG
+Oscar Robertson|PG|96|CIN|PL,SC
+Luka Doncic|PG/SG|96|DAL|PL,SC
+Shai Gilgeous-Alexander|PG/SG|96|OKC|SC,DF
+Chris Paul|PG|93|LAC|PL,DF
+Allen Iverson|PG/SG|93|PHI|SC
+Isiah Thomas|PG|92|DET|PL,SC
+John Stockton|PG|92|UTA|PL,DF
+Derrick Rose|PG|92|CHI|SC
+Damian Lillard|PG|92|POR|SH,SC
+Kyrie Irving|PG/SG|92|BKN|SH,SC
+Jerry West|PG/SG|95|LAL|SH,SC
+Steve Nash|PG|91|PHX|SH,PL
+Russell Westbrook|PG|90|OKC|PL,SC
+Bob Cousy|PG|90|BOS|PL
+Penny Hardaway|PG/SG|90|ORL|PL,SC
+Gary Payton|PG|90|SEA|DF,PL
+Jason Kidd|PG|90|NJN|PL,DF
+Tyrese Haliburton|PG|89|IND|PL,SH
+Jalen Brunson|PG|89|NYK|SC
+Ja Morant|PG|89|MEM|SC,PL
+De'Aaron Fox|PG|88|SAC|SC
+Cade Cunningham|PG|87|DET|PL,SC
+LaMelo Ball|PG|87|CHA|PL,SH
+Trae Young|PG|87|ATL|PL,SH
+Jrue Holiday|PG/SG|86|MIL|DF,PL
+Tony Parker|PG|86|SAS|SC,PL
+Rajon Rondo|PG|86|BOS|PL,DF
+Dennis Johnson|PG/SG|85|BOS|DF
+Kyle Lowry|PG|85|TOR|PL,DF
+Kemba Walker|PG|85|CHA|SC
+Tim Hardaway|PG|84|GSW|SC,PL
+Mark Price|PG|83|CLE|SH
+Fred VanVleet|PG|82|HOU|SH,DF
+Mike Conley|PG|80|UTA|PL,DF
+Dennis Schroder|PG|78|BKN|PL
+Patrick Beverley|PG|75|LAC|DF
+Michael Jordan|SG|99|CHI|SC,DF
+Kobe Bryant|SG|97|LAL|SC,DF
+Dwyane Wade|SG|95|MIA|SC,DF
+Anthony Edwards|SG|93|MIN|SC
+James Harden|SG|93|HOU|SC,PL
+Devin Booker|SG|92|PHX|SC,SH
+Tracy McGrady|SG/SF|92|ORL|SC
+Clyde Drexler|SG|91|POR|SC,DF
+George Gervin|SG/SF|91|SAS|SC
+Donovan Mitchell|SG|90|CLE|SC
+Vince Carter|SG/SF|89|TOR|SC
+Ray Allen|SG|89|SEA|SH
+Paul George|SG/SF|89|LAC|SC,DF
+Klay Thompson|SG|88|GSW|SH,DF
+Reggie Miller|SG|88|IND|SH
+Jaylen Brown|SG/SF|88|BOS|SC,DF
+Tyrese Maxey|SG|88|PHI|SC,SH
+Manu Ginobili|SG|88|SAS|SC,PL
+Jamal Murray|SG|86|DEN|SC,SH
+Bradley Beal|SG|85|WAS|SC
+Sidney Moncrief|SG|85|MIL|DF
+Joe Dumars|SG|84|DET|DF,SH
+Zach LaVine|SG|84|CHI|SC
+CJ McCollum|SG|83|NOP|SH
+Dejounte Murray|SG|83|ATL|DF,PL
+Derrick White|SG|82|BOS|DF,SH
+Eddie Jones|SG|80|CHA|DF,SH
+Alex Caruso|SG|79|CHI|DF
+Buddy Hield|SG|76|IND|SH
+Luguentz Dort|SG|76|OKC|DF
+Duncan Robinson|SG|74|MIA|SH
+LeBron James|SF/PF|98|LAL|SC,PL
+Kevin Durant|SF/PF|97|BKN|SC,SH
+Larry Bird|SF/PF|97|BOS|SH,PL
+Kawhi Leonard|SF|94|LAC|DF,SC
+Julius Erving|SF|94|PHI|SC
+Scottie Pippen|SF|93|CHI|DF,PL
+Jayson Tatum|SF/PF|93|BOS|SC,SH
+Elgin Baylor|SF/PF|93|LAL|SC,BG
+Jimmy Butler|SF|91|MIA|DF,SC
+Grant Hill|SF|90|DET|PL,SC
+Paul Pierce|SF|90|BOS|SC
+Carmelo Anthony|SF|90|NYK|SC
+Rick Barry|SF|90|GSW|SH,SC
+Dominique Wilkins|SF|89|ATL|SC
+Shawn Marion|SF/PF|87|PHX|DF,BG
+Jalen Williams|SF|85|OKC|DF,SC
+Brandon Ingram|SF|84|NOP|SC
+Franz Wagner|SF|83|ORL|SC
+Mikal Bridges|SF|82|NYK|DF,SH
+OG Anunoby|SF|82|NYK|DF,SH
+Gordon Hayward|SF|82|UTA|SH,PL
+Metta World Peace|SF|82|LAL|DF
+Michael Porter Jr.|SF|81|DEN|SH
+Andrew Wiggins|SF|78|GSW|DF
+Tayshaun Prince|SF|76|DET|DF
+Harrison Barnes|SF|76|SAC|SH
+Trevor Ariza|SF|76|HOU|DF,SH
+Danny Green|SF|74|SAS|SH,DF
+Robert Horry|SF/PF|74|LAL|SH
+Bruce Bowen|SF|72|SAS|DF,SH
+Tim Duncan|PF/C|97|SAS|BG,DF
+Giannis Antetokounmpo|PF|97|MIL|SC,DF
+Dirk Nowitzki|PF|95|DAL|SH,SC
+Karl Malone|PF|94|UTA|SC,BG
+Kevin Garnett|PF|94|MIN|DF,BG
+Charles Barkley|PF|93|PHX|BG,SC
+Anthony Davis|PF/C|93|LAL|DF,BG
+Bob Pettit|PF|92|STL|BG,SC
+Kevin McHale|PF|91|BOS|SC,BG
+Elvin Hayes|PF|90|WAS|BG
+Zion Williamson|PF|88|NOP|SC
+Dennis Rodman|PF|88|DET|DF,BG
+Chris Bosh|PF|88|TOR|SC,SH
+Blake Griffin|PF|87|LAC|SC,BG
+Bam Adebayo|PF/C|87|MIA|DF,BG
+Paolo Banchero|PF|87|ORL|SC
+Pau Gasol|PF/C|89|LAL|BG,PL
+Chet Holmgren|PF/C|86|OKC|DF,SH
+Kevin Love|PF/C|86|MIN|SH,BG
+Domantas Sabonis|PF/C|86|SAC|PL,BG
+Scottie Barnes|PF|86|TOR|DF,PL
+Draymond Green|PF|85|GSW|DF,PL
+Lauri Markkanen|PF|85|UTA|SH
+Pascal Siakam|PF|85|IND|SC
+Rasheed Wallace|PF/C|85|DET|DF,SH
+Julius Randle|PF|83|NYK|SC,BG
+Horace Grant|PF|80|CHI|DF,BG
+Kenneth Faried|PF|74|DEN|BG
+PJ Tucker|PF|72|HOU|DF
+Wilt Chamberlain|C|99|PHI|BG,SC
+Kareem Abdul-Jabbar|C|98|LAL|SC,BG
+Shaquille O'Neal|C|98|LAL|BG,SC
+Nikola Jokic|C|98|DEN|PL,BG
+Bill Russell|C|97|BOS|DF,BG
+Hakeem Olajuwon|C|96|HOU|DF,BG
+Joel Embiid|C|95|PHI|SC,BG
+Victor Wembanyama|C|95|SAS|DF,BG
+David Robinson|C|94|SAS|DF,BG
+Moses Malone|C|93|PHI|BG
+Patrick Ewing|C|91|NYK|BG,DF
+Yao Ming|C|90|HOU|BG,SC
+Dwight Howard|C|90|ORL|DF,BG
+Bill Walton|C|90|POR|PL,DF
+Karl-Anthony Towns|C|89|MIN|SH,BG
+Wes Unseld|C|87|WAS|BG,PL
+Alonzo Mourning|C|87|MIA|DF,BG
+Marc Gasol|C|86|MEM|DF,PL
+Rudy Gobert|C|86|UTA|DF,BG
+Ben Wallace|C|86|DET|DF,BG
+Artis Gilmore|C|86|CHI|BG,DF
+Dikembe Mutombo|C|85|ATL|DF,BG
+Jarrett Allen|C|82|CLE|BG,DF
+Nikola Vucevic|C|82|ORL|BG,SH
+Brook Lopez|C|80|MIL|SH,DF
+Deandre Ayton|C|80|PHX|BG
+Ivica Zubac|C|79|LAC|BG
+Clint Capela|C|78|ATL|BG,DF
+Nic Claxton|C|77|BKN|DF,BG
+Steven Adams|C|76|MEM|BG
+Mitchell Robinson|C|76|NYK|DF,BG
+Dereck Lively II|C|76|DAL|DF,BG`;
+const PLAYERS=RAW.split('\n').map((l,i)=>{const[n,p,o,t,a]=l.split('|');return{id:i,n,pos:p.split('/'),o:+o,t,a:a.split(',')}});
+const COACHES=[['Phil Jackson',3,'Eleven rings, one system. Triangle offense.'],['Gregg Popovich',3,'Twenty-two straight playoff trips. Nobody out-prepares him.'],['Red Auerbach',3,'Nine titles and a victory cigar.'],['Pat Riley',2.5,'Showtime to the Heatles. Always has a plan.'],['Erik Spoelstra',2.5,'Adapts to any roster. Rarely loses a series he should win.'],['Steve Kerr',2,'Motion offense and an even temper.'],['Chuck Daly',2,'Handled Jordan Rules and the Dream Team.'],['Larry Brown',2,'The ultimate fixer for a mismatched roster.'],['Jerry Sloan',1.5,'Same system, same results, 23 years.'],['Doc Rivers',1.5,'Players run through walls for him.'],['Mike D’Antoni',1.5,'Seven seconds or less. Pace and space.'],['Rick Carlisle',1.5,'Chess-master in the playoffs.'],['Nick Nurse',1.5,'Throws the box-and-one at you.'],['Tom Thibodeau',1.5,'Defence first, minutes second.'],['Don Nelson',1.5,'Positionless before it had a name.'],['Lenny Wilkens',1,'A steady veteran hand.']].map(c=>({n:c[0],b:c[1],d:c[2]}));
+const TEAMS=['Atlanta Ravens','Baltimore Sails','Boston Minutemen','Brooklyn Bridges','Charlotte Hornets','Chicago Gales','Cleveland Foundry','Dallas Mavericks','Denver Peaks','Detroit Pistons','Golden Gate Pioneers','Houston Rockets','Indiana Racers','Los Angeles Waves','Memphis Blues','Miami Heat','Milwaukee Brew','Minnesota Timber','New Orleans Jazz','New York Skyline','Oklahoma Thunder','Orlando Magic','Philadelphia Liberty','Phoenix Suns','Portland Rain','Sacramento Kings','San Antonio Spurs','Seattle Sonics','Toronto Maple','Utah Mesa'];
+const SLOTS=[['PG','Point Guard'],['SG','Shooting Guard'],['SF','Small Forward'],['PF','Power Forward'],['C','Center'],['SIX','Sixth Man'],['COACH','Head Coach']];
+const TRAIT={SH:'Shooter',PL:'Playmaker',DF:'Defender',BG:'Big',SC:'Scorer'};
+const tier=o=>o>=97?4:o>=93?3:o>=88?2:o>=82?1:0;
+const TIERN=['Role','Starter','All-Star','Superstar','Legend'];
+
+/* ---------- engine ---------- */
+const TW=[34,32,22,9,3];
+function draw(slot,seed,n){const R=mulb(hash(seed));
+ if(slot==='COACH'){const pool=COACHES.slice(),out=[];while(out.length<4&&pool.length){const w=pool.map(c=>5-c.b);let t=R()*w.reduce((a,b)=>a+b,0),i=0;while(t>w[i]){t-=w[i];i++}out.push(pool.splice(i,1)[0])}return out}
+ const taken=n||[],pool=PLAYERS.filter(p=>!taken.includes(p.id)&&(slot==='SIX'||p.pos.includes(slot)));const out=[];
+ let guard=0;while(out.length<5&&guard++<200){let t=R()*TW.reduce((a,b)=>a+b,0),k=0;while(k<4&&t>TW[k]){t-=TW[k];k++}
+  const c=pool.filter(p=>tier(p.o)===k&&!out.includes(p));if(!c.length)continue;out.push(c[(R()*c.length)|0])}
+ return out.sort((a,b)=>b.o-a.o)}
+function rate(r){const st=['PG','SG','SF','PF','C'].map(k=>r[k]),six=r.SIX,all=[...st,six];
+ const base=st.reduce((a,p)=>a+p.o,0)/5*.87+six.o*.13;
+ const arc=new Set(all.flatMap(p=>p.a));let syn=0;['SH','PL','DF','BG'].forEach(a=>{if(arc.has(a))syn+=.9});
+ const gaps=[];if(!arc.has('SH')){syn-=2;gaps.push('no shooter')}if(!arc.has('BG')){syn-=1.5;gaps.push('no rim protector or rebounder')}if(!arc.has('PL')){syn-=1.5;gaps.push('no playmaker')}if(!arc.has('DF')){syn-=1;gaps.push('no stopper')}
+ const cnt={};all.forEach(p=>cnt[p.t]=(cnt[p.t]||0)+1);let duo=0;Object.values(cnt).forEach(c=>{if(c>=2)duo+=Math.min(3,c*(c-1)/2)*.7});duo=Math.min(duo,3.5);
+ const coach=r.COACH.b;return{base,syn,duo,coach,gaps,total:base+syn+duo+coach}}
+function schedule(R){const opp=TEAMS.map(n=>{let g=0;for(let i=0;i<6;i++)g+=R();const z=(g-3)*1.41;return{n,r:clamp(80+z*6.5,64,95)}});
+ const g=[];opp.forEach((o,i)=>{g.push(o,o);if(i<22)g.push(o)});for(let i=g.length-1;i>0;i--){const j=(R()*(i+1))|0;[g[i],g[j]]=[g[j],g[i]]}
+ return g.slice(0,82).map((o,i)=>({o,home:i%2===0}))}
+const winP=(me,opp,home)=>1/(1+Math.exp(-(me-opp+(home?1.2:-.4))/5.4));
+function odds(rt,sch){let p=1,w=0;sch.forEach(g=>{const q=winP(rt,g.o.r,g.home);p*=q;w+=q});return{perfect:p,wins:w}}
+function playoffs(wins,rt,R){if(wins<41)return{r:'Missed the playoffs',won:false,series:[]};
+ const names=['First Round','Semifinals','Conference Finals','The Finals'],oppr=[wins>60?80:84,86,89,92],ser=[];
+ for(let i=0;i<4;i++){const o=oppr[i]+(R()-.5)*3;let a=0,b=0;const p=winP(rt-1.5,o,false);while(a<4&&b<4){if(R()<p)a++;else b++}ser.push({n:names[i],w:a,l:b,win:a===4});if(a<4)return{r:'Lost in the '+names[i],won:false,series:ser}}
+ return{r:'World Champions',won:true,series:ser}}
+function runSeason(roster,R,onGame){const sch=schedule(R),starters=['PG','SG','SF','PF','C'],base=rate(roster).total;
+ let w=0,l=0,streak=0,best=0,firstLoss=null,inj=null,injs=[],log=[];
+ for(let i=0;i<82;i++){let note='';
+  if(inj&&--inj.left<0)inj=null;
+  if(!inj){for(const s of starters){if(R()<.005){const p=roster[s];inj={s,p,left:3+((R()*6)|0),drop:clamp((p.o-70)*.22,2,6.5)};injs.push({g:i+1,n:p.n,out:inj.left+1});note='inj';break}}}
+  const me=base-(inj?inj.drop:0),gm=sch[i],p=winP(me,gm.o.r,gm.home),win=R()<p,d=me-gm.o.r;
+  const t=Math.round(100+clamp(d*.35,-8,12)+(R()-.5)*16),m=Math.max(1,Math.round(Math.abs(d*.25*(win?1:-1))+3+R()*10*(win?1:1)));
+  const mine=win?t+ (R()*6|0):t-m,theirs=win?Math.max(70,t-m):t+(R()*6|0)+1;
+  if(win){w++;streak++;best=Math.max(best,streak)}else{l++;streak=0;if(!firstLoss)firstLoss={g:i+1,o:gm.o.n}}
+  const rec={i:i+1,o:gm.o,home:gm.home,win,me:Math.max(win?mine:mine,60),th:theirs,p,note,inj:inj?inj.p.n:null,w,l,streak};log.push(rec);if(onGame)onGame(rec)}
+ return{w,l,best,firstLoss,injs,log,base,sch}}
+
+/* ---------- state ---------- */
+const KEY='hoops82';
+let G=null,timer=0,speed=1,paused=false,sim=null;
+const ld=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}};
+const sv=o=>{try{localStorage.setItem(KEY,JSON.stringify(Object.assign(ld(),o)))}catch(e){}};
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+const show=id=>{['title','draft','review','season','end'].forEach(s=>$(s).hidden=s!==id);scrollTo(0,0)};
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const ini=n=>n.replace(/[^A-Za-z ]/g,'').split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('');
+function titleInfo(){const s=ld();$('rec').innerHTML=s.best?'Best season <b>'+s.best+'</b> · Perfect seasons <b>'+(s.perfect||0)+'</b> · Played <b>'+(s.played||0)+'</b>':'Draft seven. Win 82. Lose none.';$('dNote').textContent=s.daily===today()?'Played today: '+s.dailyRes:'Same packs for everyone, once a day'}
+function newGame(mode){const seed=mode==='daily'?'hoops-'+today():'r'+Math.random().toString(36).slice(2);G={mode,seed,i:0,r:{},taken:[],rerolls:3,rc:0};pack();show('draft')}
+function pack(){const k=SLOTS[G.i][0];G.pack=draw(k,G.seed+'|'+k+'|'+G.rc,G.taken);renderDraft(true)}
+function renderDraft(anim){const[k,label]=SLOTS[G.i];$('dStep').textContent='Pick '+(G.i+1)+' of 7';$('dSlot').textContent=label;
+ $('dPips').innerHTML=SLOTS.map((s,i)=>'<i class="'+(i<G.i?'done':i===G.i?'now':'')+'">'+(s[0]==='COACH'?'HC':s[0]==='SIX'?'6':s[0])+'</i>').join('');
+ $('rr').textContent='Reroll pack ('+G.rerolls+')';$('rr').disabled=G.rerolls<1;
+ const L=$('pack');L.innerHTML='';
+ G.pack.forEach((p,i)=>{const isC=k==='COACH',t=isC?Math.min(4,Math.round(p.b)+0):tier(p.o),b=el('button','pc t'+(isC?(p.b>=3?4:p.b>=2.5?3:p.b>=2?2:1):t)+(anim?' in':''));b.style.animationDelay=(i*70)+'ms';
+  if(isC)b.innerHTML='<span class="ovr">+'+p.b+'</span><span class="mid"><b>'+esc(p.n)+'</b><small>'+esc(p.d)+'</small></span>';
+  else b.innerHTML='<span class="ovr">'+p.o+'</span><span class="mid"><b>'+esc(p.n)+'</b><small>'+(k==='SIX'?p.pos.join('/')+' · ':'')+p.t+' · '+TIERN[tier(p.o)]+'</small><span class="tags">'+p.a.map(a=>'<em>'+TRAIT[a]+'</em>').join('')+'</span></span>';
+  b.onclick=()=>choose(p);L.appendChild(b)});
+ const mini=$('mini');mini.innerHTML='';SLOTS.forEach((s,i)=>{const p=G.r[s[0]];mini.appendChild(el('div','ms'+(p?' on':''),'<small>'+(s[0]==='COACH'?'HC':s[0]==='SIX'?'6th':s[0])+'</small><b>'+(p?esc(p.n.split(' ').slice(-1)[0]):'—')+'</b>'))})}
+function choose(p){const k=SLOTS[G.i][0];G.r[k]=p;if(k!=='COACH')G.taken.push(p.id);G.i++;G.rc=0;tick(300,.07);if(G.i>=7)review();else pack()}
+$('rr').onclick=()=>{if(G.rerolls<1)return;G.rerolls--;G.rc++;pack()};
+function tick(f,v){try{const A=window.AudioContext||window.webkitAudioContext;G.ac=G.ac||new A();const o=G.ac.createOscillator(),g=G.ac.createGain(),n=G.ac.currentTime;o.type='triangle';o.frequency.value=f;g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+.25);o.connect(g);g.connect(G.ac.destination);o.start(n);o.stop(n+.3)}catch(e){}}
+const pct=x=>x>=.1?(x*100).toFixed(1)+'%':x>=.001?(x*100).toFixed(2)+'%':x>0?'<0.1%':'0%';
+/* ---------- review ---------- */
+function court(r,box){box.innerHTML='<svg viewBox="0 0 300 260" aria-hidden="true"><rect x="6" y="6" width="288" height="248" rx="6" fill="none" stroke="currentColor" stroke-width="2"/><rect x="95" y="6" width="110" height="112" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="150" cy="118" r="38" fill="none" stroke="currentColor" stroke-width="2"/><path d="M30 6V74a120 120 0 0 0 240 0V6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="150" cy="28" r="9" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+ const pos={PG:[50,76],SG:[84,50],SF:[16,50],PF:[74,22],C:[26,22]};
+ Object.keys(pos).forEach(k=>{const p=r[k],d=el('div','tok t'+tier(p.o),'<i>'+p.o+'</i><b>'+esc(p.n.split(' ').slice(-1)[0])+'</b><small>'+k+'</small>');d.style.left=pos[k][0]+'%';d.style.top=pos[k][1]+'%';box.appendChild(d)})}
+function review(){show('review');const r=G.r,rt=rate(r);G.rt=rt;G.sch=schedule(mulb(hash(G.seed+'sch')));const o=odds(rt.total,G.sch);G.od=o;
+ court(r,$('court'));
+ $('bench').innerHTML='<div class="bn t'+tier(r.SIX.o)+'"><small>SIXTH MAN</small><b>'+esc(r.SIX.n)+'</b><span>'+r.SIX.o+'</span></div><div class="bn"><small>HEAD COACH</small><b>'+esc(r.COACH.n)+'</b><span>+'+r.COACH.b+'</span></div>';
+ $('bd').innerHTML=[['Talent',rt.base.toFixed(1),'Starters (87%) and sixth man (13%)'],['Fit',(rt.syn>=0?'+':'')+rt.syn.toFixed(1),rt.gaps.length?'Missing: '+rt.gaps.join(', '):'Shooting, passing, defence and size all covered'],['Chemistry',(rt.duo>=0?'+':'')+rt.duo.toFixed(1),rt.duo?'Teammates who played together':'No shared franchises'],['Coaching','+'+rt.coach.toFixed(1),r.COACH.n]].map(x=>'<div class="bl"><b>'+x[0]+'</b><span>'+x[1]+'</span><small>'+esc(x[2])+'</small></div>').join('');
+ $('rtv').textContent=rt.total.toFixed(1);$('proj').textContent='Projected record '+Math.round(o.wins)+'-'+(82-Math.round(o.wins));$('perf').textContent=pct(o.perfect);}
+$('bSim').onclick=()=>startSeason();
+$('bRe').onclick=()=>newGame(G.mode==='daily'?'daily':'random');
+/* ---------- season ---------- */
+function startSeason(){show('season');const R=mulb(hash(G.seed+'|'+Date.now()+Math.random()));sim=runSeason(G.r,R,null);sim.R=R;sim.i=0;sim.w=0;sim.l=0;paused=false;speed=1;
+ $('dots').innerHTML='';for(let i=0;i<82;i++)$('dots').appendChild(el('i',null,''));$('lg').innerHTML='';setSpd(1);paint(null);clearInterval(timer);timer=setInterval(step,delay());}
+const delay=()=>speed===1?420:speed===3?120:speed===9?30:1;
+function setSpd(s){speed=s;document.querySelectorAll('#spd button').forEach(b=>b.classList.toggle('on',+b.dataset.s===s));if(timer){clearInterval(timer);timer=setInterval(step,delay())}}
+document.querySelectorAll('#spd button').forEach(b=>b.onclick=()=>{if(b.dataset.s==='0'){paused=!paused;b.textContent=paused?'Play':'Pause';return}setSpd(+b.dataset.s)});
+function step(){if(paused||!sim)return;const n=speed===9?3:1;for(let k=0;k<n&&sim.i<82;k++){const g=sim.log[sim.i++];sim.w=g.w;sim.l=g.l;paint(g)}if(sim.i>=82){clearInterval(timer);timer=0;setTimeout(finish,700)}}
+function paint(g){$('sw').textContent=sim.w;$('sl').textContent=sim.l;$('sg').textContent='Game '+Math.max(1,sim.i)+' of 82';
+ if(!g){$('opp').textContent='Tip-off';$('scr').textContent='';$('st').textContent='';return}
+ $('opp').textContent=(g.home?'vs ':'at ')+g.o.n;$('scr').textContent=(g.win?'W ':'L ')+g.me+'–'+g.th;$('scr').className=g.win?'w':'l';$('st').textContent=g.win?(g.streak>=10?g.streak+' straight wins':''):'The streak is over';
+ $('dots').children[g.i-1].className=g.win?'w':'l';
+ if(g.note==='inj')toast(g.inj+' is hurt. Out '+sim.injs.find(x=>x.g===g.i).out+' games.');
+ const row=el('p',g.win?'w':'l','<b>'+g.i+'</b> '+(g.win?'W':'L')+' '+g.me+'–'+g.th+' '+(g.home?'vs':'at')+' '+esc(g.o.n));const L=$('lg');L.prepend(row);while(L.children.length>5)L.lastChild.remove();
+ if(!g.win&&g.l===1&&g.w===g.i-1){tick(110,.12);$('sw').parentElement.classList.add('shake');setTimeout(()=>$('sw').parentElement.classList.remove('shake'),600)}}
+let tt=0;function toast(s){const e=$('toast');e.textContent=s;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2800)}
+$('bSkip').onclick=()=>{while(sim.i<82){const g=sim.log[sim.i++];sim.w=g.w;sim.l=g.l;paint(g)}clearInterval(timer);timer=0;finish()};
+/* ---------- end ---------- */
+const GRADE=[[82,'The Immortals','Not one loss. Nobody has ever done this.'],[80,'So close to forever','A loss or two away from perfect.'],[74,'All-time great','One of the best teams ever assembled.'],[65,'Juggernaut','A real dynasty.'],[55,'Contender','Good enough to scare anyone in a series.'],[41,'Playoff team','A solid season, but not for the history books.'],[0,'Lottery bound','Back to the draft board.']];
+function finish(){if(!sim)return;const w=sim.w,l=sim.l;sim.po=playoffs(w,G.rt.total,sim.R);const gr=GRADE.find(x=>w>=x[0]);
+ const s=ld(),cur=s.best?+s.best.split('-')[0]:-1;sv({best:w>cur?w+'-'+l:s.best,perfect:(s.perfect||0)+(l===0?1:0),played:(s.played||0)+1});if(G.mode==='daily')sv({daily:today(),dailyRes:w+'-'+l});
+ show('end');$('eRec').textContent=w+'-'+l;$('eRec').className=l===0?'gold':'';$('eT').textContent=gr[1];$('eD').textContent=gr[2];
+ const stats=[['Longest streak',sim.best],['First loss',sim.firstLoss?'Game '+sim.firstLoss.g+' vs '+sim.firstLoss.o:'None'],['Injuries',sim.injs.length?sim.injs.map(x=>x.n+' (G'+x.g+')').join(', '):'None'],['Playoffs',sim.po.r]];
+ $('eS').innerHTML=stats.map(x=>'<div><small>'+x[0]+'</small><b>'+esc(x[1])+'</b></div>').join('');
+ $('eP').innerHTML=sim.po.series.map(x=>'<span class="'+(x.win?'w':'l')+'">'+x.n+' '+x.w+'–'+x.l+'</span>').join('');
+ $('eL').innerHTML=['PG','SG','SF','PF','C','SIX','COACH'].map(k=>'<span>'+esc(G.r[k].n)+'</span>').join('');
+ if(l===0)tick(660,.1);G.txt=w+'-'+l+(sim.po.won?' and champions':'')+' on Hoops 82-0 with '+['PG','SG','SF','PF','C'].map(k=>G.r[k].n).join(', ')+', '+G.r.SIX.n+' off the bench and '+G.r.COACH.n+' coaching.'}
+$('bAgain').onclick=()=>{titleInfo();show('title')};
+$('bCopy').onclick=()=>{const b=$('bCopy');try{navigator.clipboard.writeText(G.txt).then(()=>{b.textContent='Copied'},()=>{b.textContent=G.txt})}catch(e){b.textContent=G.txt}};
+$('bDaily').onclick=()=>newGame('daily');$('bRand').onclick=()=>newGame('random');
+titleInfo();show('title');
+if(/bbtest/.test(location.search))window.__bb={PLAYERS,COACHES,draw,rate,runSeason,schedule,odds,winP,mulb,hash,playoffs,tier,SLOTS,newGame,get G(){return G},choose,review,startSeason,finish,get sim(){return sim}};
+})();</script>
+
+</body>
+</html>
